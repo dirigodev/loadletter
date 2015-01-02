@@ -11,9 +11,20 @@ serialPort.on('open',function() {
     printer.on('ready', function() {
         trello.get("/1/members/me", { cards: "open" }, function(err, data) {
             if (err) throw err;
-            printer.printLine(data.cards[0].name).lineFeed(3).print(function() {
-                console.log('printed');
-            });
+            var counter = 0,
+                printerval = setInterval(function () {
+                    printer
+                        .bold(true)
+                        .printLine(data.cards[counter].name)
+                        .bold(false)
+                        .printLine(data.cards[counter].dateLastActivity)
+                        .printLine(data.cards[counter].shortUrl)
+                        .lineFeed(3)
+                        .print(function() {
+                            console.log('printed');
+                        });
+                    counter++;
+                }, 1000);
         });
     });
 });
