@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/dirigodev/loadletter/issues"
   },
-  "homepage": "https://github.com/dirigodev/loadletter"
+  "homepage": "https://github.com/dirigodev/loadletter",
+  "devDependencies": {
+    "thermalprinter": "^0.1.0"
+  }
 }
