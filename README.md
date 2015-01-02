@@ -18,3 +18,11 @@ or if you use MacPorts
 Once you have Cairo installed you can install thermalprinter with
 
 `npm install thermalprinter --save`
+
+## Contributing
+
+All contributions must adhere to the [Idiomatic.js Style Guide](https://github.com/rwaldron/idiomatic.js), by maintaining the existing coding style.
+
+## License
+
+Copyright (c) 2014 Dirigo Design & Development. Licensed under the MIT license.
