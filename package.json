@@ -18,6 +18,7 @@
   "homepage": "https://github.com/dirigodev/loadletter",
   "devDependencies": {
     "node-trello": "^1.0.1",
+    "ntwitter": "^0.5.0",
     "thermalprinter": "^0.1.0"
   }
 }
