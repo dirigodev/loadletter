@@ -19,11 +19,16 @@ var twitterClient = new twitter({
     access_token_secret: creds.access_token_secret
 });
 
+var options = {},
+    filter = process.argv[2] || 'track',
+    value = process.argv[3] || '#whitegirlproblems';
+
+options[filter] = value;
 
 serialPort.on('open',function() {
     var printer = new Printer(serialPort);
     printer.on('ready', function() {
-        twitterClient.stream('statuses/filter', {track: [(process.argv[2] || '#whitegirlproblems')]}, function(stream) {
+        twitterClient.stream('statuses/filter', options, function(stream) {
             stream.on('data', function (data) {
                 printer.printLine(data.text).lineFeed(3).print(function() {
                     console.log(data);
