@@ -3,37 +3,37 @@ var SerialPort = require('serialport').SerialPort,
         baudrate: 19200
     }),
     Printer = require('thermalprinter'),
-    twitter = require('ntwitter');
+    Twitter = require('node-twitter');
 
-var creds = {
-    consumer_key: '1B5KBUELhN2NY1zuDs0xxyO8p',
-    consumer_secret: 'y6XMwwVVTC3CUaZAEYm1DZWa3FF3XVnKNRXLWlvEA0aEFAeWyn',
-    access_token_key: '102975831-9JzJ4wuYfXyUuEww1N6UHUFdsl1W4jkqtgSIsLvr',
-    access_token_secret: 'XnD4yRh6g95FidbRrMZWvJmuG0nH8B06uMytL2EYdrFEE'
-};
+var twitterStreamClient = new Twitter.StreamClient(
+    '1B5KBUELhN2NY1zuDs0xxyO8p',
+    'y6XMwwVVTC3CUaZAEYm1DZWa3FF3XVnKNRXLWlvEA0aEFAeWyn',
+    '102975831-9JzJ4wuYfXyUuEww1N6UHUFdsl1W4jkqtgSIsLvr',
+    'XnD4yRh6g95FidbRrMZWvJmuG0nH8B06uMytL2EYdrFEE'
+);
 
-var twitterClient = new twitter({
-    consumer_key: creds.consumer_key,
-    consumer_secret: creds.consumer_secret,
-    access_token_key: creds.access_token_key,
-    access_token_secret: creds.access_token_secret
-});
-
-var options = {},
-    filter = process.argv[2] || 'track',
-    value = process.argv[3] || '#whitegirlproblems';
-
-options[filter] = value;
+var keywords = process.argv[2] || ['#whitegirlproblems'],
+    locations = process.argv[3] || null,
+    users = process.argv[4] || null;
 
 serialPort.on('open',function() {
     var printer = new Printer(serialPort);
     printer.on('ready', function() {
-        twitterClient.stream('statuses/filter', options, function(stream) {
-            stream.on('data', function (data) {
-                printer.printLine(data.text).lineFeed(3).print(function() {
-                    console.log(data);
-                });
+        twitterStreamClient.on('close', function() {
+            console.log('Connection closed.');
+        });
+        twitterStreamClient.on('end', function() {
+            console.log('End of Line.');
+        });
+        twitterStreamClient.on('error', function(error) {
+            console.log('Error: ' + (error.code ? error.code + ' ' + error.message : error.message));
+        });
+        twitterStreamClient.on('tweet', function(tweet) {
+            printer.printLine(tweet.text).lineFeed(3).print(function() {
+                console.log(tweet);
             });
         });
-    });
+
+        twitterStreamClient.start(keywords, locations, users);
+    }):
 });
