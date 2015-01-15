@@ -12,9 +12,9 @@ var twitterStreamClient = new Twitter.StreamClient(
     'XnD4yRh6g95FidbRrMZWvJmuG0nH8B06uMytL2EYdrFEE'
 );
 
-var keywords = process.argv[2] || ['#whitegirlproblems'],
-    locations = process.argv[3] || null,
-    users = process.argv[4] || null;
+var keywords = [process.argv[2]] || ['#whitegirlproblems'],
+    locations = [process.argv[3]] || null,
+    users = [process.argv[4]] || null;
 
 serialPort.on('open',function() {
     var printer = new Printer(serialPort);
@@ -35,5 +35,5 @@ serialPort.on('open',function() {
         });
 
         twitterStreamClient.start(keywords, locations, users);
-    }):
+    });
 });
